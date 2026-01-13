@@ -1,0 +1,350 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Divine Light Theme - Warm & Heavenly */
+    --background: 45 33% 97%;
+    --foreground: 30 10% 15%;
+
+    --card: 45 40% 98%;
+    --card-foreground: 30 10% 15%;
+
+    --popover: 45 40% 98%;
+    --popover-foreground: 30 10% 15%;
+
+    /* Golden Divine Accent */
+    --primary: 43 74% 49%;
+    --primary-foreground: 45 33% 97%;
+
+    /* Soft Cream Secondary */
+    --secondary: 40 30% 94%;
+    --secondary-foreground: 30 10% 25%;
+
+    /* Muted Warm Tones */
+    --muted: 40 20% 92%;
+    --muted-foreground: 30 10% 45%;
+
+    /* Peaceful Blue Accent */
+    --accent: 215 35% 55%;
+    --accent-foreground: 45 33% 97%;
+
+    /* Rose/Love Accent */
+    --love: 10 30% 72%;
+    --love-foreground: 30 10% 15%;
+
+    /* Hope Green */
+    --hope: 140 30% 45%;
+    --hope-foreground: 45 33% 97%;
+
+    --destructive: 0 65% 55%;
+    --destructive-foreground: 45 33% 97%;
+
+    --border: 40 25% 88%;
+    --input: 40 25% 88%;
+    --ring: 43 74% 49%;
+
+    --radius: 0.75rem;
+
+    /* Divine Gradients */
+    --gradient-divine: linear-gradient(135deg, hsl(45 60% 95%) 0%, hsl(40 50% 92%) 50%, hsl(35 45% 88%) 100%);
+    --gradient-golden: linear-gradient(135deg, hsl(43 74% 49%) 0%, hsl(38 70% 55%) 50%, hsl(45 65% 60%) 100%);
+    --gradient-heaven: linear-gradient(180deg, hsl(215 40% 95%) 0%, hsl(45 33% 97%) 100%);
+    --gradient-glow: radial-gradient(ellipse at center, hsl(43 74% 49% / 0.15) 0%, transparent 70%);
+    --gradient-hero: linear-gradient(180deg, hsl(45 40% 96%) 0%, hsl(40 35% 93%) 50%, hsl(215 30% 94%) 100%);
+
+    /* Shadows */
+    --shadow-soft: 0 4px 20px -4px hsl(30 20% 50% / 0.15);
+    --shadow-glow: 0 0 40px hsl(43 74% 49% / 0.2);
+    --shadow-card: 0 8px 32px -8px hsl(30 20% 40% / 0.1);
+    --shadow-float: 0 20px 60px -15px hsl(30 20% 40% / 0.15);
+
+    /* Sidebar */
+    --sidebar-background: 45 40% 98%;
+    --sidebar-foreground: 30 10% 25%;
+    --sidebar-primary: 43 74% 49%;
+    --sidebar-primary-foreground: 45 33% 97%;
+    --sidebar-accent: 40 30% 94%;
+    --sidebar-accent-foreground: 30 10% 25%;
+    --sidebar-border: 40 25% 88%;
+    --sidebar-ring: 43 74% 49%;
+
+    /* Typography */
+    --font-heading: 'Playfair Display', serif;
+    --font-body: 'Inter', sans-serif;
+  }
+
+  .dark {
+    --background: 30 15% 10%;
+    --foreground: 45 30% 92%;
+
+    --card: 30 15% 12%;
+    --card-foreground: 45 30% 92%;
+
+    --popover: 30 15% 12%;
+    --popover-foreground: 45 30% 92%;
+
+    --primary: 43 74% 55%;
+    --primary-foreground: 30 15% 10%;
+
+    --secondary: 30 12% 18%;
+    --secondary-foreground: 45 30% 90%;
+
+    --muted: 30 12% 20%;
+    --muted-foreground: 40 15% 60%;
+
+    --accent: 215 35% 50%;
+    --accent-foreground: 45 30% 95%;
+
+    --love: 10 30% 60%;
+    --love-foreground: 45 30% 95%;
+
+    --hope: 140 30% 40%;
+    --hope-foreground: 45 30% 95%;
+
+    --destructive: 0 60% 45%;
+    --destructive-foreground: 45 30% 95%;
+
+    --border: 30 12% 22%;
+    --input: 30 12% 22%;
+    --ring: 43 74% 55%;
+
+    --gradient-divine: linear-gradient(135deg, hsl(30 15% 12%) 0%, hsl(30 12% 15%) 50%, hsl(30 10% 18%) 100%);
+    --gradient-golden: linear-gradient(135deg, hsl(43 74% 45%) 0%, hsl(38 70% 50%) 50%, hsl(45 65% 55%) 100%);
+    --gradient-heaven: linear-gradient(180deg, hsl(215 20% 15%) 0%, hsl(30 15% 10%) 100%);
+    --gradient-glow: radial-gradient(ellipse at center, hsl(43 74% 49% / 0.1) 0%, transparent 70%);
+    --gradient-hero: linear-gradient(180deg, hsl(30 15% 11%) 0%, hsl(30 12% 13%) 50%, hsl(215 15% 14%) 100%);
+
+    --shadow-soft: 0 4px 20px -4px hsl(0 0% 0% / 0.3);
+    --shadow-glow: 0 0 40px hsl(43 74% 49% / 0.15);
+    --shadow-card: 0 8px 32px -8px hsl(0 0% 0% / 0.25);
+    --shadow-float: 0 20px 60px -15px hsl(0 0% 0% / 0.35);
+
+    --sidebar-background: 30 15% 12%;
+    --sidebar-foreground: 45 30% 90%;
+    --sidebar-primary: 43 74% 55%;
+    --sidebar-primary-foreground: 30 15% 10%;
+    --sidebar-accent: 30 12% 18%;
+    --sidebar-accent-foreground: 45 30% 90%;
+    --sidebar-border: 30 12% 22%;
+    --sidebar-ring: 43 74% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-body);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+  }
+}
+
+@layer components {
+  .divine-gradient {
+    background: var(--gradient-divine);
+  }
+
+  .golden-gradient {
+    background: var(--gradient-golden);
+  }
+
+  .heaven-gradient {
+    background: var(--gradient-heaven);
+  }
+
+  .hero-gradient {
+    background: var(--gradient-hero);
+  }
+
+  .glow-overlay {
+    position: relative;
+  }
+
+  .glow-overlay::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--gradient-glow);
+    pointer-events: none;
+  }
+
+  .shadow-soft {
+    box-shadow: var(--shadow-soft);
+  }
+
+  .shadow-glow {
+    box-shadow: var(--shadow-glow);
+  }
+
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+
+  .shadow-float {
+    box-shadow: var(--shadow-float);
+  }
+
+  .text-gradient-golden {
+    background: var(--gradient-golden);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .bible-verse {
+    @apply relative px-8 py-6 italic text-center;
+    font-family: var(--font-heading);
+  }
+
+  .bible-verse::before,
+  .bible-verse::after {
+    @apply text-primary text-4xl absolute opacity-30;
+    font-family: Georgia, serif;
+  }
+
+  .bible-verse::before {
+    content: '"';
+    @apply top-2 left-2;
+  }
+
+  .bible-verse::after {
+    content: '"';
+    @apply bottom-2 right-2;
+  }
+
+  .problem-box {
+    @apply relative overflow-hidden rounded-2xl p-6 cursor-pointer transition-all duration-500;
+    background: hsl(var(--card));
+    box-shadow: var(--shadow-card);
+  }
+
+  .problem-box::before {
+    content: '';
+    @apply absolute inset-0 opacity-0 transition-opacity duration-500;
+    background: var(--gradient-glow);
+  }
+
+  .problem-box:hover::before {
+    @apply opacity-100;
+  }
+
+  .problem-box:hover {
+    box-shadow: var(--shadow-float);
+    transform: translateY(-8px);
+  }
+
+  .divine-button {
+    @apply relative overflow-hidden px-8 py-4 rounded-xl font-medium transition-all duration-300;
+    background: var(--gradient-golden);
+    color: hsl(var(--primary-foreground));
+    box-shadow: var(--shadow-soft);
+  }
+
+  .divine-button:hover {
+    box-shadow: var(--shadow-glow);
+    transform: translateY(-2px);
+  }
+
+  .divine-button::after {
+    content: '';
+    @apply absolute inset-0 opacity-0 transition-opacity duration-300;
+    background: linear-gradient(135deg, transparent 0%, hsl(0 0% 100% / 0.2) 50%, transparent 100%);
+  }
+
+  .divine-button:hover::after {
+    @apply opacity-100;
+  }
+
+  .language-card {
+    @apply relative flex flex-col items-center justify-center p-10 rounded-3xl cursor-pointer transition-all duration-500;
+    background: hsl(var(--card));
+    box-shadow: var(--shadow-card);
+  }
+
+  .language-card:hover {
+    box-shadow: var(--shadow-float);
+    transform: scale(1.05);
+  }
+
+  .language-card.selected {
+    @apply ring-4 ring-primary;
+    box-shadow: var(--shadow-glow);
+  }
+}
+
+@layer utilities {
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-float-delayed {
+    animation: float 6s ease-in-out infinite;
+    animation-delay: 2s;
+  }
+
+  .animate-glow-pulse {
+    animation: glow-pulse 3s ease-in-out infinite;
+  }
+
+  .animate-fade-up {
+    animation: fade-up 0.8s ease-out forwards;
+  }
+
+  .animate-scale-in {
+    animation: scale-in 0.5s ease-out forwards;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 20px hsl(43 74% 49% / 0.2);
+  }
+  50% {
+    box-shadow: 0 0 40px hsl(43 74% 49% / 0.4);
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
