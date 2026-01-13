@@ -1,3 +1,3 @@
 export const API_BASE = import.meta.env.PROD
-  ? "https://tamilnadu-gospel-api.onrender.com"
+  ? "https://tamilnadu.onrender.com"
   : "http://localhost:5001";
