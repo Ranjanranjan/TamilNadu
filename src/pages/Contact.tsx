@@ -19,17 +19,17 @@ const Contact = () => {
     e.preventDefault();
 
     try {
-      const res = await fetch(`${API_BASE}/api/prayers`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: name || "Anonymous",
-          message,
-          ageRange,
-        }),
-      });
+      const res = await fetch("https://tamilnadu.onrender.com/api/prayers", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    name,
+    message,
+    ageRange,
+  }),
+});
 
       if (!res.ok) {
         throw new Error("Failed to submit prayer");
