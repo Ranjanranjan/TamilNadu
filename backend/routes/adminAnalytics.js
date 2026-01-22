@@ -1,6 +1,6 @@
 import express from "express";
 import adminAuth from "../middleware/adminAuth.js";
-const API_BASE = process.env.API_BASE || "http://localhost:5001";
+
 import {
   getOverallStats,
   getDeviceAnalytics,
@@ -10,10 +10,11 @@ import {
 } from "../controllers/analyticsReportController.js";
 
 const router = express.Router();
-const API = `${API_BASE}/api/admin/analytics`;
 
+/* Protect all admin analytics routes */
 router.use(adminAuth);
 
+/* Analytics endpoints */
 router.get("/overview", getOverallStats);
 router.get("/device", getDeviceAnalytics);
 router.get("/page", getPageAnalytics);
