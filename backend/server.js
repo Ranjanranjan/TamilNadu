@@ -19,42 +19,32 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app);
 
-/* ---------------- CORS (FIXED) ---------------- */
-
-/**
- * Allow:
- * - localhost (dev)
- * - all *.vercel.app (prod)
- */
-/* ---------------- CORS ---------------- */
+/* ---------------- CORS (SAFE FIX) ---------------- */
 
 const allowedOrigins = [
   "http://localhost:8080",
   process.env.FRONTEND_URL,
-].filter(Boolean);
+];
+
+// ✅ Handle preflight FIRST
+app.options("*", cors());
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow server-to-server & preflight requests
+      // allow server-to-server & preflight
       if (!origin) return callback(null, true);
 
       if (allowedOrigins.includes(origin)) {
         return callback(null, true);
       }
 
-      // ❌ DO NOT throw error
+      // ❌ DO NOT throw errors
       return callback(null, false);
     },
     credentials: true,
   })
 );
-
-// ✅ Always allow preflight
-app.options("*", cors());
-
-
-/* ---------------- BODY PARSER ---------------- */
 
 app.use(express.json());
 
@@ -62,26 +52,11 @@ app.use(express.json());
 
 const io = new Server(server, {
   cors: {
-    origin: (origin, callback) => {
-      if (!origin) return callback(null, true);
-
-      if (
-        origin.startsWith("http://localhost") ||
-        origin.endsWith(".vercel.app")
-      ) {
-        return callback(null, true);
-      }
-
-      callback(new Error("Socket CORS not allowed"));
-    },
+    origin: allowedOrigins,
     credentials: true,
   },
 });
 
-/*
-  liveUsers Map:
-  socket.id => { sessionId, page, device, timestamp }
-*/
 const liveUsers = new Map();
 
 io.on("connection", (socket) => {
@@ -92,12 +67,10 @@ io.on("connection", (socket) => {
       ...data,
       timestamp: Date.now(),
     });
-
     io.emit("live:users", Array.from(liveUsers.values()));
   });
 
   socket.on("disconnect", () => {
-    console.log("🔴 Socket disconnected:", socket.id);
     liveUsers.delete(socket.id);
     io.emit("live:users", Array.from(liveUsers.values()));
   });
@@ -119,8 +92,8 @@ app.use("/api/admin/analytics", adminAnalyticsRoutes);
 
 mongoose
   .connect(process.env.MONGO_URI)
-  .then(() => console.log("✅ MongoDB connected"))
-  .catch((err) => console.error("❌ MongoDB error:", err));
+  .then(() => console.log("MongoDB connected ✅"))
+  .catch((err) => console.error("MongoDB error ❌", err));
 
 /* ---------------- START SERVER ---------------- */
 
