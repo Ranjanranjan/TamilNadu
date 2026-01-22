@@ -19,20 +19,16 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app);
 
-/* ---------------- CORS (SAFE FOR RENDER) ---------------- */
+/* ---------------- SAFE CORS (NO THROWING) ---------------- */
 
-// ✅ NEVER throw errors inside CORS
+// ✅ DO NOT use origin callback
+// ✅ DO NOT use app.options("*")
 app.use(
   cors({
-    origin: true, // allow all origins (safe for API)
+    origin: true, // allow all origins
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
-
-// ✅ Explicitly handle preflight
-app.options("*", cors());
 
 app.use(express.json());
 
@@ -45,23 +41,11 @@ const io = new Server(server, {
   },
 });
 
-const liveUsers = new Map();
-
 io.on("connection", (socket) => {
   console.log("🟢 Socket connected:", socket.id);
 
-  socket.on("page:view", (data) => {
-    liveUsers.set(socket.id, {
-      ...data,
-      timestamp: Date.now(),
-    });
-    io.emit("live:users", Array.from(liveUsers.values()));
-  });
-
   socket.on("disconnect", () => {
     console.log("🔴 Socket disconnected:", socket.id);
-    liveUsers.delete(socket.id);
-    io.emit("live:users", Array.from(liveUsers.values()));
   });
 });
 
@@ -89,7 +73,7 @@ mongoose
 
 /* ---------------- START SERVER ---------------- */
 
-const PORT = process.env.PORT || 10000;
+const PORT = process.env.PORT || 5001;
 
 server.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
