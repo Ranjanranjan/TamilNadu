@@ -5,32 +5,41 @@ import Admin from "./models/Admin.js";
 
 dotenv.config();
 
-async function updateAdminPassword() {
+async function createOrUpdateAdmin() {
   try {
     // 1️⃣ Connect to DB
     await mongoose.connect(process.env.MONGO_URI);
     console.log("MongoDB connected");
 
-    // 2️⃣ NEW PASSWORD (CHANGE THIS)
-    const NEW_PASSWORD = "Kuy@van_Adm1n#2026";
+    const USERNAME = "admin";
+    const PASSWORD = "gospel@38";
 
-    // 3️⃣ Hash password
-    const hashedPassword = await bcrypt.hash("gospel@38", 10);
+    // 2️⃣ Hash password
+    const hashedPassword = await bcrypt.hash(PASSWORD, 10);
 
-    // 4️⃣ Update admin password
-    const result = await Admin.updateOne(
-      { username: "admin" },
+    // 3️⃣ Try to update existing admin
+    let result = await Admin.updateOne(
+      { username: USERNAME },
       { $set: { password: hashedPassword } }
     );
 
-    console.log("Admin password updated ✅");
-    console.log(result);
+    // 4️⃣ If no admin exists, create one
+    if (result.matchedCount === 0) {
+      const newAdmin = new Admin({
+        username: USERNAME,
+        password: hashedPassword,
+      });
+      await newAdmin.save();
+      console.log("✅ Admin user created:", USERNAME);
+    } else {
+      console.log("✅ Admin password updated:", USERNAME);
+    }
 
     process.exit();
   } catch (err) {
-    console.error("Error updating admin ❌", err);
+    console.error("Error creating/updating admin ❌", err);
     process.exit(1);
   }
 }
 
-updateAdminPassword();
+createOrUpdateAdmin();
