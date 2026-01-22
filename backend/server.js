@@ -26,27 +26,33 @@ const server = http.createServer(app);
  * - localhost (dev)
  * - all *.vercel.app (prod)
  */
-const corsOptions = {
-  origin: (origin, callback) => {
-    // allow requests with no origin (mobile apps, curl, preflight)
-    if (!origin) return callback(null, true);
+/* ---------------- CORS ---------------- */
 
-    if (
-      origin.startsWith("http://localhost") ||
-      origin.endsWith(".vercel.app")
-    ) {
-      return callback(null, true);
-    }
+const allowedOrigins = [
+  "http://localhost:8080",
+  process.env.FRONTEND_URL,
+].filter(Boolean);
 
-    callback(new Error("CORS not allowed"));
-  },
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true,
-};
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Allow server-to-server & preflight requests
+      if (!origin) return callback(null, true);
 
-app.use(cors(corsOptions));
-app.options("*", cors(corsOptions)); // ✅ IMPORTANT (preflight)
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      // ❌ DO NOT throw error
+      return callback(null, false);
+    },
+    credentials: true,
+  })
+);
+
+// ✅ Always allow preflight
+app.options("*", cors());
+
 
 /* ---------------- BODY PARSER ---------------- */
 
