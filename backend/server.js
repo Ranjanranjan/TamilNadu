@@ -19,32 +19,18 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app);
 
-/* ---------------- CORS (SAFE FIX) ---------------- */
+/* ---------------- CORS (SAFE FOR RENDER + VERCEL) ---------------- */
 
-const allowedOrigins = [
-  "http://localhost:8080",
-  process.env.FRONTEND_URL,
-];
-
-// ✅ Handle preflight FIRST
-app.options("*", cors());
-
+// Allow ALL origins safely (recommended for APIs)
 app.use(
   cors({
-    origin: (origin, callback) => {
-      // allow server-to-server & preflight
-      if (!origin) return callback(null, true);
-
-      if (allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      }
-
-      // ❌ DO NOT throw errors
-      return callback(null, false);
-    },
+    origin: true,
     credentials: true,
   })
 );
+
+// IMPORTANT: handle preflight requests
+app.options("*", cors());
 
 app.use(express.json());
 
@@ -52,11 +38,20 @@ app.use(express.json());
 
 const io = new Server(server, {
   cors: {
-    origin: allowedOrigins,
+    origin: true,
     credentials: true,
   },
 });
 
+/*
+  liveUsers Map structure:
+  socket.id => {
+    sessionId,
+    page,
+    device,
+    timestamp
+  }
+*/
 const liveUsers = new Map();
 
 io.on("connection", (socket) => {
@@ -67,10 +62,12 @@ io.on("connection", (socket) => {
       ...data,
       timestamp: Date.now(),
     });
+
     io.emit("live:users", Array.from(liveUsers.values()));
   });
 
   socket.on("disconnect", () => {
+    console.log("🔴 Socket disconnected:", socket.id);
     liveUsers.delete(socket.id);
     io.emit("live:users", Array.from(liveUsers.values()));
   });
@@ -78,6 +75,7 @@ io.on("connection", (socket) => {
 
 /* ---------------- ROUTES ---------------- */
 
+// Health check
 app.get("/", (req, res) => {
   res.send("✅ TamilNadu Gospel Backend Running");
 });
@@ -85,6 +83,8 @@ app.get("/", (req, res) => {
 app.use("/api/admin", adminRoutes);
 app.use("/api/prayers", prayerRoutes);
 app.use("/api/analytics", analyticsRoutes);
+
+/* Admin analytics (reports + realtime data) */
 app.use("/api/admin/analytics", analyticsReports);
 app.use("/api/admin/analytics", adminAnalyticsRoutes);
 
@@ -93,11 +93,14 @@ app.use("/api/admin/analytics", adminAnalyticsRoutes);
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB connected ✅"))
-  .catch((err) => console.error("MongoDB error ❌", err));
+  .catch((err) => {
+    console.error("MongoDB error ❌", err);
+    process.exit(1);
+  });
 
 /* ---------------- START SERVER ---------------- */
 
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 10000;
 
 server.listen(PORT, () => {
   console.log(`🚀 Backend running on port ${PORT}`);
