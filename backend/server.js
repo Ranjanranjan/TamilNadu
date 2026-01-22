@@ -19,25 +19,36 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app);
 
-/* ---------------- CORS ---------------- */
+/* ---------------- CORS (FIXED) ---------------- */
 
-const allowedOrigins = [
-  "http://localhost:8080", // local frontend
-  process.env.FRONTEND_URL, // deployed frontend (Vercel)
-];
+/**
+ * Allow:
+ * - localhost (dev)
+ * - all *.vercel.app (prod)
+ */
+const corsOptions = {
+  origin: (origin, callback) => {
+    // allow requests with no origin (mobile apps, curl, preflight)
+    if (!origin) return callback(null, true);
 
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("CORS not allowed"));
-      }
-    },
-    credentials: true,
-  })
-);
+    if (
+      origin.startsWith("http://localhost") ||
+      origin.endsWith(".vercel.app")
+    ) {
+      return callback(null, true);
+    }
+
+    callback(new Error("CORS not allowed"));
+  },
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions)); // ✅ IMPORTANT (preflight)
+
+/* ---------------- BODY PARSER ---------------- */
 
 app.use(express.json());
 
@@ -45,19 +56,25 @@ app.use(express.json());
 
 const io = new Server(server, {
   cors: {
-    origin: allowedOrigins,
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+
+      if (
+        origin.startsWith("http://localhost") ||
+        origin.endsWith(".vercel.app")
+      ) {
+        return callback(null, true);
+      }
+
+      callback(new Error("Socket CORS not allowed"));
+    },
     credentials: true,
   },
 });
 
 /*
-  liveUsers Map structure:
-  socket.id => {
-    sessionId,
-    page,
-    device,
-    timestamp
-  }
+  liveUsers Map:
+  socket.id => { sessionId, page, device, timestamp }
 */
 const liveUsers = new Map();
 
@@ -89,8 +106,6 @@ app.get("/", (req, res) => {
 app.use("/api/admin", adminRoutes);
 app.use("/api/prayers", prayerRoutes);
 app.use("/api/analytics", analyticsRoutes);
-
-/* Admin analytics (reports + realtime data) */
 app.use("/api/admin/analytics", analyticsReports);
 app.use("/api/admin/analytics", adminAnalyticsRoutes);
 
@@ -98,13 +113,13 @@ app.use("/api/admin/analytics", adminAnalyticsRoutes);
 
 mongoose
   .connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB connected ✅"))
-  .catch((err) => console.error("MongoDB error ❌", err));
+  .then(() => console.log("✅ MongoDB connected"))
+  .catch((err) => console.error("❌ MongoDB error:", err));
 
 /* ---------------- START SERVER ---------------- */
 
 const PORT = process.env.PORT || 5001;
 
 server.listen(PORT, () => {
-  console.log(`🚀 Admin backend running on port ${PORT}`);
+  console.log(`🚀 Backend running on port ${PORT}`);
 });
