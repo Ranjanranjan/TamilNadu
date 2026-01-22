@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import BibleVerse from "@/components/BibleVerse";
 import { toast } from "@/hooks/use-toast";
+import { API_BASE } from "../config/api";
 
 const Contact = () => {
   const { t } = useTranslation();
@@ -18,7 +19,7 @@ const Contact = () => {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost:5001/api/prayers", {
+      const res = await fetch(`${API_BASE}/api/prayers`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
