@@ -1,9 +1,9 @@
 import http from "http";
-import { Server } from "socket.io";
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
+import { Server } from "socket.io";
 
 /* ROUTES */
 import adminRoutes from "./routes/admin.js";
@@ -19,17 +19,19 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app);
 
-/* ---------------- CORS (SAFE FOR RENDER + VERCEL) ---------------- */
+/* ---------------- CORS (SAFE FOR RENDER) ---------------- */
 
-// Allow ALL origins safely (recommended for APIs)
+// ✅ NEVER throw errors inside CORS
 app.use(
   cors({
-    origin: true,
+    origin: true, // allow all origins (safe for API)
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
-// IMPORTANT: handle preflight requests
+// ✅ Explicitly handle preflight
 app.options("*", cors());
 
 app.use(express.json());
@@ -43,15 +45,6 @@ const io = new Server(server, {
   },
 });
 
-/*
-  liveUsers Map structure:
-  socket.id => {
-    sessionId,
-    page,
-    device,
-    timestamp
-  }
-*/
 const liveUsers = new Map();
 
 io.on("connection", (socket) => {
@@ -62,7 +55,6 @@ io.on("connection", (socket) => {
       ...data,
       timestamp: Date.now(),
     });
-
     io.emit("live:users", Array.from(liveUsers.values()));
   });
 
@@ -75,7 +67,6 @@ io.on("connection", (socket) => {
 
 /* ---------------- ROUTES ---------------- */
 
-// Health check
 app.get("/", (req, res) => {
   res.send("✅ TamilNadu Gospel Backend Running");
 });
@@ -83,8 +74,6 @@ app.get("/", (req, res) => {
 app.use("/api/admin", adminRoutes);
 app.use("/api/prayers", prayerRoutes);
 app.use("/api/analytics", analyticsRoutes);
-
-/* Admin analytics (reports + realtime data) */
 app.use("/api/admin/analytics", analyticsReports);
 app.use("/api/admin/analytics", adminAnalyticsRoutes);
 
@@ -103,5 +92,5 @@ mongoose
 const PORT = process.env.PORT || 10000;
 
 server.listen(PORT, () => {
-  console.log(`🚀 Backend running on port ${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
 });
