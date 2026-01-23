@@ -17,7 +17,14 @@ const ProblemDetail = () => {
 
   // Scroll to top when component loads or slug changes
   useEffect(() => {
+    // Scroll immediately
     window.scrollTo(0, 0);
+    // Also scroll after a small delay to ensure DOM is fully rendered
+    const scrollTimer = setTimeout(() => {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+    }, 100);
+    return () => clearTimeout(scrollTimer);
   }, [slug]);
 
   if (!problem) {
