@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
 import { problems } from '@/data/problems';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -8,6 +9,10 @@ import BibleVerse from '@/components/BibleVerse';
 
 const Home = () => {
   const { t } = useTranslation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <div className="min-h-screen bg-background">

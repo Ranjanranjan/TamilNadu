@@ -1,11 +1,16 @@
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
+import { useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import BibleVerse from '@/components/BibleVerse';
 
 const About = () => {
   const { t } = useTranslation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const sections = [
     { title: 'whoWeAre', text: 'whoWeAreText', icon: '🙏' },

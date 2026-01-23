@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import Header from "@/components/Header";
@@ -9,6 +9,10 @@ import { API_BASE } from "../config/api";
 
 const Contact = () => {
   const { t } = useTranslation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const [submitted, setSubmitted] = useState(false);
   const [message, setMessage] = useState("");

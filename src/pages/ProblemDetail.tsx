@@ -1,6 +1,7 @@
 import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
+import { useEffect } from 'react';
 import { getProblemBySlug } from '@/data/problems';
 import { useLanguageStore } from '@/stores/languageStore';
 import Header from '@/components/Header';
@@ -13,6 +14,11 @@ const ProblemDetail = () => {
   const { t } = useTranslation();
   const { language } = useLanguageStore();
   const problem = getProblemBySlug(slug || '');
+
+  // Scroll to top when component loads or slug changes
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [slug]);
 
   if (!problem) {
     return <div>Problem not found</div>;
