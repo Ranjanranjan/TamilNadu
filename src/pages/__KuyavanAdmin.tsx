@@ -11,7 +11,7 @@ export default function KuyavanAdmin() {
     setError("");
 
     try {
-      const res = await fetch(`${API_BASE}/api/admin/login`, {
+      const res = await fetch(`${API_BASE}/admin/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
