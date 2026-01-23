@@ -23,7 +23,11 @@ export default function KuyavanAdmin() {
         }),
       });
 
+      console.log("Response status:", res.status);
+      console.log("Response ok:", res.ok);
+
       const data = await res.json();
+      console.log("Response data:", data);
 
       if (!res.ok) {
         setError(data.message || "Login failed");
@@ -35,8 +39,9 @@ export default function KuyavanAdmin() {
 
       // 🔁 Redirect (dashboard comes next)
       window.location.href = "/admin-dashboard";
-    } catch {
-      setError("Server error");
+    } catch (err) {
+      console.error("Login error:", err);
+      setError(err instanceof Error ? err.message : "Server error");
     }
   };
 
