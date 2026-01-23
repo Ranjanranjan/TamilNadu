@@ -1,10 +1,12 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useLanguageStore } from '@/stores/languageStore';
+import { useState } from 'react';
 
 const Header = () => {
   const { t, i18n } = useTranslation();
   const { language, setLanguage } = useLanguageStore();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const toggleLanguage = () => {
     const newLang = language === 'en' ? 'ta' : 'en';
@@ -20,20 +22,58 @@ const Header = () => {
           <span className="font-heading text-xl font-bold text-foreground">TamilNadu Gospel</span>
         </Link>
 
+        {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-8">
           <Link to="/" className="text-foreground hover:text-primary transition-colors">{t('home')}</Link>
           <Link to="/about" className="text-foreground hover:text-primary transition-colors">{t('about')}</Link>
           <Link to="/contact" className="text-foreground hover:text-primary transition-colors">{t('contact')}</Link>
         </nav>
 
-        <button
-          onClick={toggleLanguage}
-          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-secondary hover:bg-secondary/80 transition-colors"
-        >
-          <span>{language === 'en' ? '🇮🇳' : '🇬🇧'}</span>
-          <span className="text-sm font-medium">{language === 'en' ? 'தமிழ்' : 'English'}</span>
-        </button>
+        <div className="flex items-center gap-4">
+          <button
+            onClick={toggleLanguage}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-secondary hover:bg-secondary/80 transition-colors"
+          >
+            <span>{language === 'en' ? '🇮🇳' : '🇬🇧'}</span>
+            <span className="text-sm font-medium">{language === 'en' ? 'தமிழ்' : 'English'}</span>
+          </button>
+
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="md:hidden text-foreground text-2xl"
+          >
+            ☰
+          </button>
+        </div>
       </div>
+
+      {/* Mobile Navigation */}
+      {mobileMenuOpen && (
+        <nav className="md:hidden bg-background border-t border-border px-6 py-4 flex flex-col gap-4">
+          <Link 
+            to="/" 
+            className="text-foreground hover:text-primary transition-colors"
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            {t('home')}
+          </Link>
+          <Link 
+            to="/about" 
+            className="text-foreground hover:text-primary transition-colors"
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            {t('about')}
+          </Link>
+          <Link 
+            to="/contact" 
+            className="text-foreground hover:text-primary transition-colors"
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            {t('contact')}
+          </Link>
+        </nav>
+      )}
     </header>
   );
 };
