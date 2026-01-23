@@ -88,7 +88,7 @@ export default function AdminDashboard() {
     }
 
     Promise.all([
-  fetch(`${API_BASE}/api/admin/prayers`, {
+  fetch(`${API_BASE}/admin/prayers`, {
     headers: { Authorization: `Bearer ${token}` },
   }).then((res) => res.json()),
   fetchOverview(),

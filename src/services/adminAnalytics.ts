@@ -1,6 +1,6 @@
 import { API_BASE } from "@/config/api";
 
-const API = `${API_BASE}/api/admin/analytics`;
+const API = `${API_BASE}/admin/analytics`;
 
 const authHeader = () => ({
   Authorization: `Bearer ${localStorage.getItem("adminToken")}`,

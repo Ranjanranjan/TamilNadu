@@ -39,7 +39,7 @@ export default function AdminPrayerRequests() {
       return;
     }
 
-    fetch(`${API_BASE}/api/admin/prayers`, {
+    fetch(`${API_BASE}/admin/prayers`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -65,7 +65,7 @@ export default function AdminPrayerRequests() {
 
   try {
     const res = await fetch(
-      `${API_BASE}/api/admin/prayers/${id}/prayed`,
+      `${API_BASE}/admin/prayers/${id}/prayed`,
       {
         method: "PUT",
         headers: {
@@ -97,7 +97,7 @@ export default function AdminPrayerRequests() {
 
     try {
       await fetch(
-        `${API_BASE}/api/admin/prayers/${id}`,
+        `${API_BASE}/admin/prayers/${id}`,
         {
           method: "DELETE",
           headers: {
@@ -118,7 +118,7 @@ export default function AdminPrayerRequests() {
 
   try {
     const res = await fetch(
-      `${API_BASE}/api/admin/prayers/${id}/archive`,
+      `${API_BASE}/admin/prayers/${id}/archive`,
       {
         method: "PUT",
         headers: {
@@ -189,7 +189,7 @@ export default function AdminPrayerRequests() {
 
   await Promise.all(
     selected.map((id) =>
-      fetch(`${API_BASE}/api/admin/prayers/${id}/prayed`, {
+      fetch(`${API_BASE}/admin/prayers/${id}/prayed`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -213,7 +213,7 @@ const bulkArchive = async () => {
 
   await Promise.all(
     selected.map((id) =>
-      fetch(`${API_BASE}/api/admin/prayers/${id}/archive`, {
+      fetch(`${API_BASE}/admin/prayers/${id}/archive`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -239,7 +239,7 @@ const bulkDelete = async () => {
 
   await Promise.all(
     selected.map((id) =>
-      fetch(`${API_BASE}/api/admin/prayers/${id}`, {
+      fetch(`${API_BASE}/admin/prayers/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
