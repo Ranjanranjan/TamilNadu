@@ -49,31 +49,29 @@ const ProblemDetail = () => {
             <h1 className="font-heading text-4xl md:text-5xl font-bold text-foreground">{t(problem.titleKey)}</h1>
           </motion.div>
 
-          {/* Why It Happens */}
-          <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="mb-12">
-            <h2 className="font-heading text-2xl font-bold text-foreground mb-6">{t('whyItHappens')}</h2>
-            <ul className="space-y-3">
-              {content.whyItHappens.map((item, i) => (
-                <li key={i} className="flex gap-3 text-muted-foreground">
-                  <span className="text-primary">•</span>
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </motion.section>
 
-          {/* Practical Solutions */}
-          <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="mb-12">
-            <h2 className="font-heading text-2xl font-bold text-foreground mb-6">{t('practicalSolutions')}</h2>
-            <ul className="space-y-3">
-              {content.practicalSolutions.map((item, i) => (
-                <li key={i} className="flex gap-3 text-muted-foreground">
-                  <span className="text-hope">✓</span>
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </motion.section>
+          {/* Dynamically render all custom content keys except spiritualGuidance */}
+          {Object.keys(content)
+            .filter(key => key !== 'spiritualGuidance')
+            .map((key, idx) => (
+              <motion.section
+                key={key}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 + idx * 0.1 }}
+                className="mb-12"
+              >
+                <h2 className="font-heading text-2xl font-bold text-foreground mb-6">{t(key)}</h2>
+                <ul className="space-y-3">
+                  {content[key].map((item, i) => (
+                    <li key={i} className="flex gap-3 text-muted-foreground">
+                      <span className="text-primary">•</span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </motion.section>
+            ))}
 
           {/* Spiritual Guidance */}
           <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="mb-12">
