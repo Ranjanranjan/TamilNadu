@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as XLSX from "xlsx";
-import { FaSort } from "react-icons/fa";
 import { saveAs } from "file-saver";
 import { motion, AnimatePresence } from "framer-motion";
 import { API_BASE } from "@/config/api";
@@ -23,6 +22,7 @@ export default function AdminPrayerRequests() {
   const navigate = useNavigate();
   const [requests, setRequests] = useState<PrayerRequest[]>([]);
   const [sortType, setSortType] = useState<string>("");
+  const [districtFilter, setDistrictFilter] = useState<string>("All");
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<PrayerStatus>("pending");
   const [selected, setSelected] = useState<string[]>([]);
@@ -163,6 +163,37 @@ export default function AdminPrayerRequests() {
     );
   }
 
+  // Get unique districts for filter dropdown
+  const allDistricts = Array.from(
+    new Set(requests.map((r) => r.location).filter(Boolean))
+  ).sort((a, b) => {
+    if (a === "Chennai") return -1;
+    if (b === "Chennai") return 1;
+    return a.localeCompare(b);
+  });
+
+  // Sorting and filtering logic
+  const getSortedRequests = () => {
+    let filtered = requests.filter((r) => r.status === filter);
+    if (districtFilter !== "All") {
+      filtered = filtered.filter((r) => r.location === districtFilter);
+    }
+    if (sortType === "district") {
+      filtered = [...filtered].sort((a, b) => {
+        if (!a.location) return 1;
+        if (!b.location) return -1;
+        return a.location.localeCompare(b.location);
+      });
+    } else if (sortType === "age") {
+      filtered = [...filtered].sort((a, b) => {
+        if (!a.ageRange) return 1;
+        if (!b.ageRange) return -1;
+        return a.ageRange.localeCompare(b.ageRange);
+      });
+    }
+    return filtered;
+  };
+
   const exportToExcel = () => {
   const data = requests.map((req) => ({
     Name: req.name || "Anonymous",
@@ -261,61 +292,84 @@ const bulkDelete = async () => {
   return (
     <div style={styles.page}>
       {/* Header */}
-     {/* Header */}
-<header style={styles.header}>
-  <div>
-    <h1 style={styles.title}>Prayer Requests</h1>
-
-    {/* Filter Tabs */}
-    <div style={styles.filters}>
-  {(["pending", "prayed", "archived"] as PrayerStatus[]).map((type) => (
-    <button
-      key={type}
-      onClick={() => setFilter(type)}
-      style={{
-        ...styles.filterBtn,
-        ...(filter === type ? styles.activeFilter : {}),
-      }}
-    >
-      {type.charAt(0).toUpperCase() + type.slice(1)}
-      <span style={styles.badge}>{counts[type]}</span>
-    </button>
-  ))}
-</div>
-
-
-  </div>
-
-  {/* Right side actions */}
-  <div style={{ display: "flex", gap: 12 }}>
-    <button style={styles.exportBtn} onClick={exportToExcel}>
-      ⬇ Export Excel
-    </button>
-
-    <button onClick={() => navigate("/admin-dashboard")} style={styles.back}>
-  
-    // Sorting logic
-    const getSortedRequests = () => {
-      let filtered = requests.filter((r) => r.status === filter);
-      if (sortType === "district") {
-        filtered = [...filtered].sort((a, b) => {
-          if (!a.location) return 1;
-          if (!b.location) return -1;
-          return a.location.localeCompare(b.location);
-        });
-      } else if (sortType === "age") {
-        filtered = [...filtered].sort((a, b) => {
-          if (!a.ageRange) return 1;
-          if (!b.ageRange) return -1;
-          return a.ageRange.localeCompare(b.ageRange);
-        });
-      }
-      return filtered;
-    };
-      ← Back
-    </button>
-  </div>
-</header>
+      <header style={styles.header}>
+        <div>
+          <h1 style={styles.title}>Prayer Requests</h1>
+          {/* Filter Tabs */}
+          <div style={styles.filters}>
+            {(["pending", "prayed", "archived"] as PrayerStatus[]).map((type) => (
+              <button
+                key={type}
+                onClick={() => setFilter(type)}
+                style={{
+                  ...styles.filterBtn,
+                  ...(filter === type ? styles.activeFilter : {}),
+                }}
+              >
+                {type.charAt(0).toUpperCase() + type.slice(1)}
+                <span style={styles.badge}>{counts[type]}</span>
+              </button>
+            ))}
+          </div>
+          {/* District Filter Dropdown */}
+          <div style={{ marginTop: 12 }}>
+            <label htmlFor="district-filter" style={{ color: "#facc15", marginRight: 8 }}>
+              Filter by District:
+            </label>
+            <select
+              id="district-filter"
+              value={districtFilter}
+              onChange={(e) => setDistrictFilter(e.target.value)}
+              style={{
+                padding: "6px 12px",
+                borderRadius: 8,
+                border: "1px solid #334155",
+                background: "#020617",
+                color: "#facc15",
+                fontSize: 14,
+                marginRight: 12,
+              }}
+            >
+              <option value="All">All</option>
+              {allDistricts.map((district) => (
+                <option key={district} value={district}>
+                  {district}
+                </option>
+              ))}
+            </select>
+            {/* Sorting Dropdown */}
+            <label htmlFor="sort-type" style={{ color: "#facc15", marginRight: 8 }}>
+              Sort by:
+            </label>
+            <select
+              id="sort-type"
+              value={sortType}
+              onChange={(e) => setSortType(e.target.value)}
+              style={{
+                padding: "6px 12px",
+                borderRadius: 8,
+                border: "1px solid #334155",
+                background: "#020617",
+                color: "#facc15",
+                fontSize: 14,
+              }}
+            >
+              <option value="">Default</option>
+              <option value="district">District</option>
+              <option value="age">Age</option>
+            </select>
+          </div>
+        </div>
+        {/* Right side actions */}
+        <div style={{ display: "flex", gap: 12 }}>
+          <button style={styles.exportBtn} onClick={exportToExcel}>
+            ⬇ Export Excel
+          </button>
+          <button onClick={() => navigate("/admin-dashboard")} style={styles.back}>
+            ← Back
+          </button>
+        </div>
+      </header>
    {selected.length > 0 && (
   <div style={styles.bulkBar}>
     <span style={{ color: "#facc15" }}>
@@ -342,91 +396,75 @@ const bulkDelete = async () => {
 
 
       {/* Requests */}
-<section style={styles.list}>
-  {requests.length === 0 && (
-    <p style={{ color: "#94a3b8" }}>No prayer requests yet.</p>
-  )}
-
-  <AnimatePresence>
-    {requests
-      .filter((req) => req.status === filter)
-      .map((req) => (
-        <motion.div
-          key={req._id}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{
-            opacity: req.status === "prayed" ? 0.6 : 1,
-            y: 0,
-          }}
-          exit={{ opacity: 0, scale: 0.95 }}
-          transition={{ duration: 0.25, ease: "easeOut" }}
-          whileHover={{ scale: 1.01 }}
-          style={styles.card}
-        >
-          <div style={styles.cardHeader}>
-  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-    <input
-      type="checkbox"
-      checked={selected.includes(req._id)}
-      onChange={() => toggleSelect(req._id)}
-      style={styles.checkbox}
-    />
-
-    <h3>{req.name || "Anonymous"}</h3>
-  </div>
-
-  <span style={styles.date}>
-    {new Date(req.createdAt).toLocaleDateString()}
-  </span>
-</div>
-
-
-          <p style={styles.message}>{req.message}</p>
-
-          <div style={styles.metadata}>
-            {req.ageRange && (
-              <p style={{ fontSize: "12px", color: "#cbd5e1" }}>Age: {req.ageRange}</p>
-            )}
-            {req.phoneNumber && (
-              <p style={{ fontSize: "12px", color: "#cbd5e1" }}>Phone: {req.phoneNumber}</p>
-            )}
-            {req.location && (
-              <p style={{ fontSize: "12px", color: "#cbd5e1" }}>Location: {req.location}</p>
-            )}
-          </div>
-
-          <div style={styles.actions}>
-            {req.status === "pending" ? (
-              <button
-                onClick={() => markAsPrayed(req._id)}
-                style={styles.actionBtn}
-              >
-                Mark as Prayed
-              </button>
-            ) : (
-              <span style={{ color: "#22c55e", fontWeight: 600 }}>
-                ✓ Prayed
-              </span>
-            )}
-
-            <button
-              style={styles.secondaryBtn}
-              onClick={() => archivePrayer(req._id)}
+      <section style={styles.list}>
+        {getSortedRequests().length === 0 && (
+          <p style={{ color: "#94a3b8" }}>No prayer requests yet.</p>
+        )}
+        <AnimatePresence>
+          {getSortedRequests().map((req) => (
+            <motion.div
+              key={req._id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{
+                opacity: req.status === "prayed" ? 0.6 : 1,
+                y: 0,
+              }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.25, ease: "easeOut" }}
+              whileHover={{ scale: 1.01 }}
+              style={styles.card}
             >
-              Archive
-            </button>
-
-            <button
-              style={styles.deleteBtn}
-              onClick={() => deletePrayer(req._id)}
-            >
-              Delete
-            </button>
-          </div>
-        </motion.div>
-      ))}
-  </AnimatePresence>
-</section>
+              <div style={styles.cardHeader}>
+                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <input
+                    type="checkbox"
+                    checked={selected.includes(req._id)}
+                    onChange={() => toggleSelect(req._id)}
+                    style={styles.checkbox}
+                  />
+                  <h3>{req.name || "Anonymous"}</h3>
+                </div>
+                <span style={styles.date}>
+                  {new Date(req.createdAt).toLocaleDateString()}
+                </span>
+              </div>
+              {/* Stack all fields, always visible, one per line */}
+              <div style={{ marginBottom: 12 }}>
+                <div style={{ fontSize: 14, color: "#e5e7eb", marginBottom: 4 }}><b>Message:</b> {req.message}</div>
+                <div style={{ fontSize: 13, color: "#cbd5e1", marginBottom: 2 }}><b>Age:</b> {req.ageRange || <span style={{ color: '#64748b' }}>—</span>}</div>
+                <div style={{ fontSize: 13, color: "#cbd5e1", marginBottom: 2 }}><b>Phone:</b> {req.phoneNumber || <span style={{ color: '#64748b' }}>—</span>}</div>
+                <div style={{ fontSize: 13, color: "#cbd5e1", marginBottom: 2 }}><b>Location:</b> {req.location || <span style={{ color: '#64748b' }}>—</span>}</div>
+              </div>
+              <div style={styles.actions}>
+                {req.status === "pending" ? (
+                  <button
+                    onClick={() => markAsPrayed(req._id)}
+                    style={styles.actionBtn}
+                  >
+                    Mark as Prayed
+                  </button>
+                ) : (
+                  <span style={{ color: "#22c55e", fontWeight: 600 }}>
+                    ✓ Prayed
+                  </span>
+                )}
+                <button
+                  style={styles.secondaryBtn}
+                  onClick={() => archivePrayer(req._id)}
+                >
+                  Archive
+                </button>
+                <button
+                  style={styles.deleteBtn}
+                  onClick={() => deletePrayer(req._id)}
+                >
+                  Delete
+                </button>
+              </div>
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </section>
 
 
       {/* Footer verse */}
