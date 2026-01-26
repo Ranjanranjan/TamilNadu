@@ -11,6 +11,7 @@ import { API_BASE } from "../config/api";
 const tamilNaduDistricts = [
   "Ariyalur",
   "Chengalpattu",
+  "Chennai",
   "Coimbatore",
   "Cuddalore",
   "Dharmapuri",
@@ -25,8 +26,9 @@ const tamilNaduDistricts = [
   "Mayiladuthurai",
   "Nagapattinam",
   "Namakkal",
-  "Nilgiri",
+  "Nilgiris",
   "Perambalur",
+  "Pudukkottai",
   "Ramanathapuram",
   "Ranipet",
   "Salem",
@@ -35,14 +37,15 @@ const tamilNaduDistricts = [
   "Thanjavur",
   "Theni",
   "Thoothukudi",
-  "Tirupati",
-  "Tiruppur",
   "Tiruchirappalli",
   "Tirunelveli",
+  "Tirupathur",
+  "Tiruppur",
+  "Tiruvallur",
   "Tiruvannamalai",
   "Tiruvarur",
   "Vellore",
-  "Villupuram",
+  "Viluppuram",
   "Virudhunagar"
 ];
 
@@ -65,9 +68,15 @@ const Contact = () => {
   const handleLocationChange = (value: string) => {
     setLocation(value);
     if (value.trim()) {
-      const filtered = tamilNaduDistricts.filter(district =>
+      let filtered = tamilNaduDistricts.filter(district =>
         district.toLowerCase().includes(value.toLowerCase())
       );
+      // Prioritize exact match at the top
+      filtered = filtered.sort((a, b) => {
+        if (a.toLowerCase() === value.toLowerCase()) return -1;
+        if (b.toLowerCase() === value.toLowerCase()) return 1;
+        return a.localeCompare(b);
+      });
       setFilteredDistricts(filtered);
       setShowSuggestions(true);
     } else {
@@ -213,7 +222,7 @@ const Contact = () => {
 
               <div>
                 <label className="block text-foreground font-medium mb-2">
-                  Location (Optional) - Tamil Nadu District
+                  Location (Required) - Tamil Nadu District
                 </label>
                 <div className="relative">
                   <input
@@ -223,6 +232,7 @@ const Contact = () => {
                     onChange={(e) => handleLocationChange(e.target.value)}
                     onFocus={() => location && setShowSuggestions(true)}
                     className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:ring-2 focus:ring-primary"
+                    required
                   />
                   {showSuggestions && filteredDistricts.length > 0 && (
                     <div className="absolute z-10 w-full mt-1 bg-card border border-border rounded-xl shadow-lg max-h-48 overflow-y-auto">
