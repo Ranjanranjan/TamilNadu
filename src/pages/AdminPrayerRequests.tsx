@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as XLSX from "xlsx";
+import { FaSort } from "react-icons/fa";
 import { saveAs } from "file-saver";
 import { motion, AnimatePresence } from "framer-motion";
 import { API_BASE } from "@/config/api";
@@ -21,6 +22,7 @@ type PrayerRequest = {
 export default function AdminPrayerRequests() {
   const navigate = useNavigate();
   const [requests, setRequests] = useState<PrayerRequest[]>([]);
+  const [sortType, setSortType] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<PrayerStatus>("pending");
   const [selected, setSelected] = useState<string[]>([]);
@@ -291,6 +293,25 @@ const bulkDelete = async () => {
     </button>
 
     <button onClick={() => navigate("/admin-dashboard")} style={styles.back}>
+  
+    // Sorting logic
+    const getSortedRequests = () => {
+      let filtered = requests.filter((r) => r.status === filter);
+      if (sortType === "district") {
+        filtered = [...filtered].sort((a, b) => {
+          if (!a.location) return 1;
+          if (!b.location) return -1;
+          return a.location.localeCompare(b.location);
+        });
+      } else if (sortType === "age") {
+        filtered = [...filtered].sort((a, b) => {
+          if (!a.ageRange) return 1;
+          if (!b.ageRange) return -1;
+          return a.ageRange.localeCompare(b.ageRange);
+        });
+      }
+      return filtered;
+    };
       ← Back
     </button>
   </div>
