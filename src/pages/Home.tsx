@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { problems } from '@/data/problems';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import BibleVerse from '@/components/BibleVerse';
+import WisdomQuote from '@/components/WisdomQuote';
 
 const Home = () => {
   const { t } = useTranslation();
@@ -26,7 +26,7 @@ const Home = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <span className="text-7xl mb-6 block animate-float">✝️</span>
+            <span className="text-7xl mb-6 block animate-float">🌟</span>
             <h1 className="font-heading text-4xl md:text-6xl font-bold text-foreground mb-6">
               {t('heroTitle')}
             </h1>
@@ -45,8 +45,8 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Bible Verse */}
-      <BibleVerse verseKey="home" />
+      {/* Wisdom Quote */}
+      <WisdomQuote verseKey="home" />
 
       {/* Problems Section */}
       <section id="problems" className="py-20 px-6">

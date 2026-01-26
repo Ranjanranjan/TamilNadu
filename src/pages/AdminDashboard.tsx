@@ -149,7 +149,7 @@ export default function AdminDashboard() {
         <h1 style={styles.title}>TamilNadu Admin Dashboard</h1>
       </div>
 
-      {/* PRAYER ANALYTICS */}
+      {/* REQUEST ANALYTICS */}
       {showCharts ? (
         <GraphAnalysis requests={requests} />
       ) : (
@@ -160,8 +160,8 @@ export default function AdminDashboard() {
       <section style={styles.hero}>
         <h2>Welcome, Admin ✨</h2>
         <p>
-          You are stewarding <b>TamilNadu Gospel</b>.  
-          Monitor prayer, outreach, and engagement across regions and devices.
+          You are managing <b>PeaceHub</b>.  
+          Monitor user engagement, messages, and outreach across regions and devices.
         </p>
       </section>
 
@@ -187,10 +187,10 @@ export default function AdminDashboard() {
       <LivePageFeed users={liveUsers} />
 
 
-      {/* PRAYER STATUS */}
+      {/* REQUEST STATUS */}
       <section style={styles.stats}>
-        <StatCard title="Pending Prayers" value={pending} />
-        <StatCard title="Prayed" value={prayed} />
+        <StatCard title="Pending Messages" value={pending} />
+        <StatCard title="Responded" value={prayed} />
         <StatCard title="Archived" value={archived} />
       </section>
 
@@ -200,7 +200,7 @@ export default function AdminDashboard() {
           style={styles.actionBtn}
           onClick={() => navigate("/admin-prayer-requests")}
         >
-          View Prayer Requests
+          View User Messages
         </button>
 
         <button style={styles.actionBtn} disabled>
@@ -215,9 +215,9 @@ export default function AdminDashboard() {
       {/* FOOTER */}
       <footer style={styles.footer}>
         <p>
-          “Go into all the world and preach the gospel to all creation.”
+          "Helping people find peace, healing, and hope in their lives."
           <br />
-          <b>— Mark 16:15</b>
+          <b>— PeaceHub Mission</b>
         </p>
       </footer>
     </AdminLayout>

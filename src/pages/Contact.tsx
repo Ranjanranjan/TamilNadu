@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import BibleVerse from "@/components/BibleVerse";
+import WisdomQuote from "@/components/WisdomQuote";
 import { toast } from "@/hooks/use-toast";
 import { API_BASE } from "../config/api";
 
@@ -178,7 +178,7 @@ const Contact = () => {
         </div>
       </main>
 
-      <BibleVerse verseKey="contact" />
+      <WisdomQuote verseKey="contact" />
       <Footer />
     </div>
   );

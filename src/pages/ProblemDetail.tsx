@@ -6,7 +6,7 @@ import { getProblemBySlug } from '@/data/problems';
 import { useLanguageStore } from '@/stores/languageStore';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import BibleVerse from '@/components/BibleVerse';
+import WisdomQuote from '@/components/WisdomQuote';
 import { ArrowLeft } from 'lucide-react';
 
 const ProblemDetail = () => {
@@ -90,7 +90,7 @@ const ProblemDetail = () => {
         </div>
       </main>
 
-      <BibleVerse verseKey={problem.slug} />
+      <WisdomQuote verseKey={problem.slug} />
       <Footer />
     </div>
   );
