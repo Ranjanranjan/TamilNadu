@@ -6,7 +6,7 @@ const router = express.Router();
 // POST a new prayer request
 router.post("/", async (req, res) => {
   try {
-    const { name, message } = req.body;
+    const { name, message, ageRange, phoneNumber, location } = req.body;
 
     if (!name || !message) {
       return res.status(400).json({ message: "Name and message are required" });
@@ -15,6 +15,9 @@ router.post("/", async (req, res) => {
     const prayer = new PrayerRequest({
       name,
       message,
+      ageRange,
+      phoneNumber,
+      location,
     });
 
     await prayer.save();
