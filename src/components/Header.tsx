@@ -34,7 +34,6 @@ const Header = () => {
             onClick={toggleLanguage}
             className="flex items-center gap-2 px-4 py-2 rounded-lg bg-secondary hover:bg-secondary/80 transition-colors"
           >
-            <span>{language === 'en' ? '🇮🇳' : '🇬🇧'}</span>
             <span className="text-sm font-medium">{language === 'en' ? 'தமிழ்' : 'English'}</span>
           </button>
 

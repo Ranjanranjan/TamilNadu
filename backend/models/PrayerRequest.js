@@ -10,6 +10,18 @@ const prayerRequestSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    ageRange: {
+      type: String,
+      default: null,
+    },
+    phoneNumber: {
+      type: String,
+      default: null,
+    },
+    location: {
+      type: String,
+      default: null,
+    },
     status: {
       type: String,
       enum: ["pending", "prayed", "archived"],

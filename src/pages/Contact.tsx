@@ -1,11 +1,50 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
+import { MessageCircle, Instagram, Facebook } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WisdomQuote from "@/components/WisdomQuote";
 import { toast } from "@/hooks/use-toast";
 import { API_BASE } from "../config/api";
+
+const tamilNaduDistricts = [
+  "Ariyalur",
+  "Chengalpattu",
+  "Coimbatore",
+  "Cuddalore",
+  "Dharmapuri",
+  "Dindigul",
+  "Erode",
+  "Kallakurichi",
+  "Kanchipuram",
+  "Kanyakumari",
+  "Karur",
+  "Krishnagiri",
+  "Madurai",
+  "Mayiladuthurai",
+  "Nagapattinam",
+  "Namakkal",
+  "Nilgiri",
+  "Perambalur",
+  "Ramanathapuram",
+  "Ranipet",
+  "Salem",
+  "Sivaganga",
+  "Tenkasi",
+  "Thanjavur",
+  "Theni",
+  "Thoothukudi",
+  "Tirupati",
+  "Tiruppur",
+  "Tiruchirappalli",
+  "Tirunelveli",
+  "Tiruvannamalai",
+  "Tiruvarur",
+  "Vellore",
+  "Villupuram",
+  "Virudhunagar"
+];
 
 const Contact = () => {
   const { t } = useTranslation();
@@ -18,6 +57,30 @@ const Contact = () => {
   const [message, setMessage] = useState("");
   const [name, setName] = useState("");
   const [ageRange, setAgeRange] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [location, setLocation] = useState("");
+  const [filteredDistricts, setFilteredDistricts] = useState<string[]>([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+
+  const handleLocationChange = (value: string) => {
+    setLocation(value);
+    if (value.trim()) {
+      const filtered = tamilNaduDistricts.filter(district =>
+        district.toLowerCase().includes(value.toLowerCase())
+      );
+      setFilteredDistricts(filtered);
+      setShowSuggestions(true);
+    } else {
+      setFilteredDistricts([]);
+      setShowSuggestions(false);
+    }
+  };
+
+  const handleSelectDistrict = (district: string) => {
+    setLocation(district);
+    setShowSuggestions(false);
+    setFilteredDistricts([]);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,6 +95,8 @@ const Contact = () => {
     name,
     message,
     ageRange,
+    phoneNumber,
+    location,
   }),
 });
 
@@ -43,6 +108,8 @@ const Contact = () => {
       setMessage("");
       setName("");
       setAgeRange("");
+      setPhoneNumber("");
+      setLocation("");
 
       toast({
         title: t("prayerSubmitted"),
@@ -58,9 +125,9 @@ const Contact = () => {
   };
 
   const socialLinks = [
-    { name: "WhatsApp", icon: "💬", url: "https://wa.me/9176280304" },
-    { name: "Instagram", icon: "📷", url: "https://www.instagram.com/Kuyavan_creations" },
-    { name: "Facebook", icon: "📘", url: "https://www.facebook.com/share/1KEEfAVFz1/" },
+    { name: "WhatsApp", icon: MessageCircle, url: "https://wa.me/9176280304" },
+    { name: "Instagram", icon: Instagram, url: "https://www.instagram.com/Kuyavan_creations" },
+    { name: "Facebook", icon: Facebook, url: "https://www.facebook.com/share/1KEEfAVFz1/" },
   ];
 
   return (
@@ -131,6 +198,48 @@ const Contact = () => {
                 </select>
               </div>
 
+              <div>
+                <label className="block text-foreground font-medium mb-2">
+                  Phone Number (Optional)
+                </label>
+                <input
+                  type="tel"
+                  placeholder="+91 XXXXXXXXXX"
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:ring-2 focus:ring-primary"
+                />
+              </div>
+
+              <div>
+                <label className="block text-foreground font-medium mb-2">
+                  Location (Optional) - Tamil Nadu District
+                </label>
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="Type district name..."
+                    value={location}
+                    onChange={(e) => handleLocationChange(e.target.value)}
+                    onFocus={() => location && setShowSuggestions(true)}
+                    className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:ring-2 focus:ring-primary"
+                  />
+                  {showSuggestions && filteredDistricts.length > 0 && (
+                    <div className="absolute z-10 w-full mt-1 bg-card border border-border rounded-xl shadow-lg max-h-48 overflow-y-auto">
+                      {filteredDistricts.map((district) => (
+                        <div
+                          key={district}
+                          onClick={() => handleSelectDistrict(district)}
+                          className="px-4 py-2 hover:bg-primary hover:text-primary-foreground cursor-pointer"
+                        >
+                          {district}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+
               <button type="submit" className="divine-button w-full">
                 {t("submitPrayer")}
               </button>
@@ -162,17 +271,20 @@ const Contact = () => {
               {t("getInTouchSubtitle")}
             </p>
             <div className="flex justify-center gap-6">
-              {socialLinks.map((link) => (
-                <a
-                  key={link.name}
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-4xl hover:scale-110 transition-transform"
-                >
-                  {link.icon}
-                </a>
-              ))}
+              {socialLinks.map((link) => {
+                const Icon = link.icon;
+                return (
+                  <a
+                    key={link.name}
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-foreground hover:text-primary transition-colors hover:scale-110"
+                  >
+                    <Icon size={32} />
+                  </a>
+                );
+              })}
             </div>
           </motion.div>
         </div>

@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import { useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import WisdomQuote from '@/components/WisdomQuote';
 
 const About = () => {
   const { t } = useTranslation();
@@ -17,7 +16,6 @@ const About = () => {
     { title: 'whyWeDoThis', text: 'whyWeDoThisText', icon: '❤️' },
     { title: 'sharingGodsLove', text: 'sharingGodsLoveText', icon: '💡' },
     { title: 'hopeAndSalvation', text: 'hopeAndSalvationText', icon: '🌟' },
-    { title: 'firstRapture', text: 'firstRaptureText', icon: '✨' },
   ];
 
   return (
@@ -54,7 +52,6 @@ const About = () => {
         </div>
       </main>
 
-      <WisdomQuote verseKey="about" />
       <Footer />
     </div>
   );

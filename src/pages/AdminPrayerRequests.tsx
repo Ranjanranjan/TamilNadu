@@ -11,6 +11,9 @@ type PrayerRequest = {
   _id: string;
   name: string;
   message: string;
+  ageRange?: string;
+  phoneNumber?: string;
+  location?: string;
   status: PrayerStatus;
   createdAt: string;
 };
@@ -359,6 +362,18 @@ const bulkDelete = async () => {
 
           <p style={styles.message}>{req.message}</p>
 
+          <div style={styles.metadata}>
+            {req.ageRange && (
+              <p style={{ fontSize: "12px", color: "#cbd5e1" }}>Age: {req.ageRange}</p>
+            )}
+            {req.phoneNumber && (
+              <p style={{ fontSize: "12px", color: "#cbd5e1" }}>Phone: {req.phoneNumber}</p>
+            )}
+            {req.location && (
+              <p style={{ fontSize: "12px", color: "#cbd5e1" }}>Location: {req.location}</p>
+            )}
+          </div>
+
           <div style={styles.actions}>
             {req.status === "pending" ? (
               <button
@@ -512,6 +527,15 @@ const styles: Record<string, React.CSSProperties> = {
   date: {
     color: "#94a3b8",
     fontSize: 14,
+  },
+
+  metadata: {
+    display: "flex",
+    flexWrap: "wrap",
+    gap: 16,
+    marginBottom: 12,
+    paddingBottom: 12,
+    borderBottom: "1px solid #1e293b",
   },
 
   message: {
