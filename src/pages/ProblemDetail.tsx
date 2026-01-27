@@ -1,7 +1,7 @@
 import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { getProblemBySlug } from '@/data/problems';
 import { useLanguageStore } from '@/stores/languageStore';
 import Header from '@/components/Header';
@@ -33,7 +33,39 @@ const ProblemDetail = () => {
 
   const content = problem.content[language || 'en'];
 
-  return (
+  // Form state for prayer request
+  const [submitted, setSubmitted] = useState(false);
+  const [message, setMessage] = useState("");
+  const [name, setName] = useState("");
+  const [ageRange, setAgeRange] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [location, setLocation] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+    try {
+      const res = await fetch("https://tamilnadu.onrender.com/api/prayers", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, message, ageRange, phoneNumber, location }),
+      });
+      if (!res.ok) throw new Error("Failed to submit prayer");
+      setSubmitted(true);
+      setMessage("");
+      setName("");
+      setAgeRange("");
+      setPhoneNumber("");
+      setLocation("");
+    } catch (err) {
+      setError("Failed to submit prayer request. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
     <div className="min-h-screen bg-background">
       <Header />
       
@@ -127,36 +159,71 @@ const ProblemDetail = () => {
           <div className="bg-card rounded-2xl p-8 shadow-card mb-12">
             <h2 className="font-heading text-2xl font-bold text-foreground mb-4 text-center">{t("contactTitle")}</h2>
             <p className="text-muted-foreground text-center mb-6">{t("contactSubtitle")}</p>
-            <form className="space-y-4 max-w-xl mx-auto">
-              <div>
-                <label className="block text-foreground font-medium mb-2">{t("prayerMessage")} *</label>
-                <textarea required rows={4} className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:ring-2 focus:ring-primary resize-none" />
-              </div>
-              <div>
-                <label className="block text-foreground font-medium mb-2">{t("yourName")}</label>
-                <input type="text" className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:ring-2 focus:ring-primary" />
-              </div>
-              <div>
-                <label className="block text-foreground font-medium mb-2">{t("ageRange")}</label>
-                <select className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:ring-2 focus:ring-primary">
-                  <option value="">--</option>
-                  <option value="10-15">{t("age10to15")}</option>
-                  <option value="16-19">{t("age16to19")}</option>
-                  <option value="20-30">{t("age20to30")}</option>
-                  <option value="30-45">{t("age30to45")}</option>
-                  <option value="45+">{t("age45plus")}</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-foreground font-medium mb-2">Phone Number (Optional)</label>
-                <input type="tel" placeholder="+91 XXXXXXXXXX" className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:ring-2 focus:ring-primary" />
-              </div>
-              <div>
-                <label className="block text-foreground font-medium mb-2">Location (Required) - Tamil Nadu District</label>
-                <input type="text" placeholder="Type district name..." className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:ring-2 focus:ring-primary" required />
-              </div>
-              <button type="submit" className="divine-button w-full">{t("submitPrayer")}</button>
-            </form>
+            {submitted ? (
+              <div className="text-center text-green-600 font-semibold py-8">{t("prayerSubmitted")}</div>
+            ) : (
+              <form className="space-y-4 max-w-xl mx-auto" onSubmit={handleSubmit}>
+                {error && <div className="text-red-600 text-center">{error}</div>}
+                <div>
+                  <label className="block text-foreground font-medium mb-2">{t("prayerMessage")} *</label>
+                  <textarea
+                    required
+                    rows={4}
+                    className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:ring-2 focus:ring-primary resize-none"
+                    value={message}
+                    onChange={e => setMessage(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label className="block text-foreground font-medium mb-2">{t("yourName")}</label>
+                  <input
+                    type="text"
+                    className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:ring-2 focus:ring-primary"
+                    value={name}
+                    onChange={e => setName(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label className="block text-foreground font-medium mb-2">{t("ageRange")}</label>
+                  <select
+                    className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:ring-2 focus:ring-primary"
+                    value={ageRange}
+                    onChange={e => setAgeRange(e.target.value)}
+                  >
+                    <option value="">--</option>
+                    <option value="10-15">{t("age10to15")}</option>
+                    <option value="16-19">{t("age16to19")}</option>
+                    <option value="20-30">{t("age20to30")}</option>
+                    <option value="30-45">{t("age30to45")}</option>
+                    <option value="45+">{t("age45plus")}</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-foreground font-medium mb-2">Phone Number (Optional)</label>
+                  <input
+                    type="tel"
+                    placeholder="+91 XXXXXXXXXX"
+                    className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:ring-2 focus:ring-primary"
+                    value={phoneNumber}
+                    onChange={e => setPhoneNumber(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label className="block text-foreground font-medium mb-2">Location (Required) - Tamil Nadu District</label>
+                  <input
+                    type="text"
+                    placeholder="Type district name..."
+                    className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:ring-2 focus:ring-primary"
+                    required
+                    value={location}
+                    onChange={e => setLocation(e.target.value)}
+                  />
+                </div>
+                <button type="submit" className="divine-button w-full" disabled={loading}>
+                  {loading ? t("submitting") : t("submitPrayer")}
+                </button>
+              </form>
+            )}
           </div>
         </div>
       </main>
