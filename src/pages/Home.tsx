@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
 import { problems } from '@/data/problems';
 import Header from '@/components/Header';
-import Footer from '@/components/Footer';
+// import Footer from '@/components/Footer';
 import WisdomQuote from '@/components/WisdomQuote';
 
 const Home = () => {
@@ -91,7 +91,7 @@ const Home = () => {
         </div>
       </section>
 
-      <Footer />
+      {/* Footer removed as requested */}
     </div>
   );
 };

@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { useEffect } from 'react';
 import Header from '@/components/Header';
-import Footer from '@/components/Footer';
+// import Footer from '@/components/Footer';
 
 const About = () => {
   const { t } = useTranslation();
@@ -52,7 +52,7 @@ const About = () => {
         </div>
       </main>
 
-      <Footer />
+      {/* Footer removed as requested */}
     </div>
   );
 };
