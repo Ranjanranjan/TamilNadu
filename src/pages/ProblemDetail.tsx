@@ -50,7 +50,80 @@ const ProblemDetail = () => {
           </motion.div>
 
 
-          {/* Contact Form and Social Section - show only once before all content */}
+
+
+          {/* Dynamically render all custom content keys except spiritualGuidance */}
+          {Object.keys(content)
+            .filter(key => key !== 'spiritualGuidance')
+            .map((key, idx) => (
+              <motion.section
+                key={key}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 + idx * 0.1 }}
+                className="mb-12"
+              >
+                <h2 className="font-heading text-2xl font-bold text-foreground mb-6">{t(key)}</h2>
+                <ul className="space-y-3">
+                  {content[key].map((item, i) => (
+                    <li key={i} className="flex gap-3 text-muted-foreground">
+                      <span className="text-primary">•</span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </motion.section>
+            ))}
+
+          {/* Spiritual Guidance */}
+          <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="mb-12">
+            <h2 className="font-heading text-2xl font-bold text-foreground mb-6">{t('spiritualGuidance')}</h2>
+            <ul className="space-y-3">
+              {content.spiritualGuidance.map((item, i) => (
+                <li key={i} className="flex gap-3 text-muted-foreground">
+                  <span className="text-primary">✝</span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </motion.section>
+
+
+          {/* Centered Verse for Financial Distress (id 1) */}
+          {problem.id === '1' && (
+            <div className="text-center my-8">
+              {(language || 'en') === 'ta' ? (
+                <>
+                  <p className="font-semibold text-lg mb-2 italic text-yellow-500">என் தேவன் தமது மகிமையுள்ள ஐசுவரியத்தின் படி<br />உங்கள் எல்லா தேவைகளையும் நிறைவேற்றுவார்.</p>
+                  <p className="text-yellow-500 italic">பிலிப்பியர் 4:19</p>
+                </>
+              ) : (
+                <>
+                  <p className="font-semibold text-lg mb-2 italic text-yellow-500">And my God will meet all your needs according to His glorious riches in Christ Jesus.</p>
+                  <p className="text-yellow-500 italic">Philippians 4:19</p>
+                </>
+              )}
+            </div>
+          )}
+
+          {/* Centered Verse for Anxiety & Fear (id 2) */}
+          {problem.id === '2' && (
+            <div className="text-center my-8">
+              {(language || 'en') === 'ta' ? (
+                <>
+                  <p className="font-semibold text-lg mb-2 italic text-yellow-500">“நீ பயப்படாதே, நான் உன்னோடு இருக்கிறேன்; திகையாதே, நான் உன் தேவன்; நான் உன்னை பலப்படுத்தி உனக்குச் சகாயம்பண்ணுவேன்; என் நீதியுடைய வலதுகரத்தினாலே உன்னைத்தாங்குவேன்.”</p>
+                  <p className="text-yellow-500 italic">ஏசாயா 41:10</p>
+                </>
+              ) : (
+                <>
+                  <p className="font-semibold text-lg mb-2 italic text-yellow-500">So do not fear, for I am with you; do not be dismayed, for I am your God.<br />I will strengthen you and help you; I will uphold you with my righteous right hand.</p>
+                  <p className="text-yellow-500 italic">Isaiah 41:10</p>
+                </>
+              )}
+            </div>
+          )}
+
+          {/* Contact Form and Social Section - show after verse and spiritual guidance */}
           <div className="bg-card rounded-2xl p-8 shadow-card mb-12">
             <h2 className="font-heading text-2xl font-bold text-foreground mb-4 text-center">{t("contactTitle")}</h2>
             <p className="text-muted-foreground text-center mb-6">{t("contactSubtitle")}</p>
@@ -94,76 +167,6 @@ const ProblemDetail = () => {
               </div>
             </div>
           </div>
-
-          {/* Dynamically render all custom content keys except spiritualGuidance */}
-          {Object.keys(content)
-            .filter(key => key !== 'spiritualGuidance')
-            .map((key, idx) => (
-              <motion.section
-                key={key}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 + idx * 0.1 }}
-                className="mb-12"
-              >
-                <h2 className="font-heading text-2xl font-bold text-foreground mb-6">{t(key)}</h2>
-                <ul className="space-y-3">
-                  {content[key].map((item, i) => (
-                    <li key={i} className="flex gap-3 text-muted-foreground">
-                      <span className="text-primary">•</span>
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </motion.section>
-            ))}
-
-          {/* Spiritual Guidance */}
-          <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="mb-12">
-            <h2 className="font-heading text-2xl font-bold text-foreground mb-6">{t('spiritualGuidance')}</h2>
-            <ul className="space-y-3">
-              {content.spiritualGuidance.map((item, i) => (
-                <li key={i} className="flex gap-3 text-muted-foreground">
-                  <span className="text-primary">✝</span>
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </motion.section>
-
-          {/* Centered Verse for Financial Distress (id 1) */}
-          {problem.id === '1' && (
-            <div className="text-center my-8">
-              {(language || 'en') === 'ta' ? (
-                <>
-                  <p className="font-semibold text-lg mb-2">என் தேவன் தமது மகிமையுள்ள ஐசுவரியத்தின் படி<br />உங்கள் எல்லா தேவைகளையும் நிறைவேற்றுவார்.</p>
-                  <p className="text-muted-foreground">பிலிப்பியர் 4:19</p>
-                </>
-              ) : (
-                <>
-                  <p className="font-semibold text-lg mb-2">And my God will meet all your needs according to His glorious riches in Christ Jesus.</p>
-                  <p className="text-muted-foreground">Philippians 4:19</p>
-                </>
-              )}
-            </div>
-          )}
-
-          {/* Centered Verse for Anxiety & Fear (id 2) */}
-          {problem.id === '2' && (
-            <div className="text-center my-8">
-              {(language || 'en') === 'ta' ? (
-                <>
-                  <p className="font-semibold text-lg mb-2">“நீ பயப்படாதே, நான் உன்னோடு இருக்கிறேன்; திகையாதே, நான் உன் தேவன்; நான் உன்னை பலப்படுத்தி உனக்குச் சகாயம்பண்ணுவேன்; என் நீதியுடைய வலதுகரத்தினாலே உன்னைத்தாங்குவேன்.”</p>
-                  <p className="text-muted-foreground">ஏசாயா 41:10</p>
-                </>
-              ) : (
-                <>
-                  <p className="font-semibold text-lg mb-2">So do not fear, for I am with you; do not be dismayed, for I am your God.<br />I will strengthen you and help you; I will uphold you with my righteous right hand.</p>
-                  <p className="text-muted-foreground">Isaiah 41:10</p>
-                </>
-              )}
-            </div>
-          )}
         </div>
       </main>
 
