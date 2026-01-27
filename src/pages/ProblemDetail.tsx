@@ -123,7 +123,7 @@ const ProblemDetail = () => {
             </div>
           )}
 
-          {/* Contact Form and Social Section - show after verse and spiritual guidance */}
+          {/* Contact Form - show after verse and spiritual guidance, no social section */}
           <div className="bg-card rounded-2xl p-8 shadow-card mb-12">
             <h2 className="font-heading text-2xl font-bold text-foreground mb-4 text-center">{t("contactTitle")}</h2>
             <p className="text-muted-foreground text-center mb-6">{t("contactSubtitle")}</p>
@@ -157,15 +157,6 @@ const ProblemDetail = () => {
               </div>
               <button type="submit" className="divine-button w-full">{t("submitPrayer")}</button>
             </form>
-            <div className="mt-8 text-center">
-              <h2 className="font-heading text-2xl font-bold text-foreground mb-2">{t("getInTouch")}</h2>
-              <p className="text-muted-foreground mb-6">{t("getInTouchSubtitle")}</p>
-              <div className="flex justify-center gap-6">
-                <a href="https://wa.me/9176280304" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-primary transition-colors hover:scale-110"><span className="sr-only">WhatsApp</span><svg width="32" height="32" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-message-circle"><circle cx="12" cy="12" r="10" /><path d="M8 15s1.5-2 4-2 4 2 4 2" /></svg></a>
-                <a href="https://www.instagram.com/Kuyavan_creations" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-primary transition-colors hover:scale-110"><span className="sr-only">Instagram</span><svg width="32" height="32" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-instagram"><rect x="2" y="2" width="20" height="20" rx="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" /><line x1="17.5" y1="6.5" x2="17.5" y2="6.5" /></svg></a>
-                <a href="https://www.facebook.com/share/1KEEfAVFz1/" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-primary transition-colors hover:scale-110"><span className="sr-only">Facebook</span><svg width="32" height="32" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-facebook"><path d="M18 2h-3a4 4 0 0 0-4 4v3H7v4h4v8h4v-8h3l1-4h-4V6a1 1 0 0 1 1-1h3z" /></svg></a>
-              </div>
-            </div>
           </div>
         </div>
       </main>
