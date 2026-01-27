@@ -161,7 +161,7 @@ const ProblemDetail = () => {
         </div>
       </main>
 
-      <ContactFooter />
+      {/* Footer removed as requested */}
     </div>
   );
 };
