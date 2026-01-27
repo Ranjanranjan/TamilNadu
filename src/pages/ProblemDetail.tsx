@@ -50,74 +50,72 @@ const ProblemDetail = () => {
           </motion.div>
 
 
-          {/* Dynamically render all custom content keys except spiritualGuidance */}
+          {/* Contact Form and Social Section - show only once before all content */}
+          <div className="bg-card rounded-2xl p-8 shadow-card mb-12">
+            <h2 className="font-heading text-2xl font-bold text-foreground mb-4 text-center">{t("contactTitle")}</h2>
+            <p className="text-muted-foreground text-center mb-6">{t("contactSubtitle")}</p>
+            <form className="space-y-4 max-w-xl mx-auto">
+              <div>
+                <label className="block text-foreground font-medium mb-2">{t("prayerMessage")} *</label>
+                <textarea required rows={4} className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:ring-2 focus:ring-primary resize-none" />
+              </div>
+              <div>
+                <label className="block text-foreground font-medium mb-2">{t("yourName")}</label>
+                <input type="text" className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:ring-2 focus:ring-primary" />
+              </div>
+              <div>
+                <label className="block text-foreground font-medium mb-2">{t("ageRange")}</label>
+                <select className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:ring-2 focus:ring-primary">
+                  <option value="">--</option>
+                  <option value="10-15">{t("age10to15")}</option>
+                  <option value="16-19">{t("age16to19")}</option>
+                  <option value="20-30">{t("age20to30")}</option>
+                  <option value="30-45">{t("age30to45")}</option>
+                  <option value="45+">{t("age45plus")}</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-foreground font-medium mb-2">Phone Number (Optional)</label>
+                <input type="tel" placeholder="+91 XXXXXXXXXX" className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:ring-2 focus:ring-primary" />
+              </div>
+              <div>
+                <label className="block text-foreground font-medium mb-2">Location (Required) - Tamil Nadu District</label>
+                <input type="text" placeholder="Type district name..." className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:ring-2 focus:ring-primary" required />
+              </div>
+              <button type="submit" className="divine-button w-full">{t("submitPrayer")}</button>
+            </form>
+            <div className="mt-8 text-center">
+              <h2 className="font-heading text-2xl font-bold text-foreground mb-2">{t("getInTouch")}</h2>
+              <p className="text-muted-foreground mb-6">{t("getInTouchSubtitle")}</p>
+              <div className="flex justify-center gap-6">
+                <a href="https://wa.me/9176280304" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-primary transition-colors hover:scale-110"><span className="sr-only">WhatsApp</span><svg width="32" height="32" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-message-circle"><circle cx="12" cy="12" r="10" /><path d="M8 15s1.5-2 4-2 4 2 4 2" /></svg></a>
+                <a href="https://www.instagram.com/Kuyavan_creations" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-primary transition-colors hover:scale-110"><span className="sr-only">Instagram</span><svg width="32" height="32" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-instagram"><rect x="2" y="2" width="20" height="20" rx="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" /><line x1="17.5" y1="6.5" x2="17.5" y2="6.5" /></svg></a>
+                <a href="https://www.facebook.com/share/1KEEfAVFz1/" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-primary transition-colors hover:scale-110"><span className="sr-only">Facebook</span><svg width="32" height="32" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-facebook"><path d="M18 2h-3a4 4 0 0 0-4 4v3H7v4h4v8h4v-8h3l1-4h-4V6a1 1 0 0 1 1-1h3z" /></svg></a>
+              </div>
+            </div>
+          </div>
 
+          {/* Dynamically render all custom content keys except spiritualGuidance */}
           {Object.keys(content)
             .filter(key => key !== 'spiritualGuidance')
             .map((key, idx) => (
-              <div key={key}>
-                <motion.section
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 + idx * 0.1 }}
-                  className="mb-12"
-                >
-                  <h2 className="font-heading text-2xl font-bold text-foreground mb-6">{t(key)}</h2>
-                  <ul className="space-y-3">
-                    {content[key].map((item, i) => (
-                      <li key={i} className="flex gap-3 text-muted-foreground">
-                        <span className="text-primary">•</span>
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </motion.section>
-
-                {/* Inline Contact Form and Social Section */}
-                <div className="bg-card rounded-2xl p-8 shadow-card mb-12">
-                  <h2 className="font-heading text-2xl font-bold text-foreground mb-4 text-center">{t("contactTitle")}</h2>
-                  <p className="text-muted-foreground text-center mb-6">{t("contactSubtitle")}</p>
-                  <form className="space-y-4 max-w-xl mx-auto">
-                    <div>
-                      <label className="block text-foreground font-medium mb-2">{t("prayerMessage")} *</label>
-                      <textarea required rows={4} className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:ring-2 focus:ring-primary resize-none" />
-                    </div>
-                    <div>
-                      <label className="block text-foreground font-medium mb-2">{t("yourName")}</label>
-                      <input type="text" className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:ring-2 focus:ring-primary" />
-                    </div>
-                    <div>
-                      <label className="block text-foreground font-medium mb-2">{t("ageRange")}</label>
-                      <select className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:ring-2 focus:ring-primary">
-                        <option value="">--</option>
-                        <option value="10-15">{t("age10to15")}</option>
-                        <option value="16-19">{t("age16to19")}</option>
-                        <option value="20-30">{t("age20to30")}</option>
-                        <option value="30-45">{t("age30to45")}</option>
-                        <option value="45+">{t("age45plus")}</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label className="block text-foreground font-medium mb-2">Phone Number (Optional)</label>
-                      <input type="tel" placeholder="+91 XXXXXXXXXX" className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:ring-2 focus:ring-primary" />
-                    </div>
-                    <div>
-                      <label className="block text-foreground font-medium mb-2">Location (Required) - Tamil Nadu District</label>
-                      <input type="text" placeholder="Type district name..." className="w-full px-4 py-3 rounded-xl border border-border bg-background focus:ring-2 focus:ring-primary" required />
-                    </div>
-                    <button type="submit" className="divine-button w-full">{t("submitPrayer")}</button>
-                  </form>
-                  <div className="mt-8 text-center">
-                    <h2 className="font-heading text-2xl font-bold text-foreground mb-2">{t("getInTouch")}</h2>
-                    <p className="text-muted-foreground mb-6">{t("getInTouchSubtitle")}</p>
-                    <div className="flex justify-center gap-6">
-                      <a href="https://wa.me/9176280304" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-primary transition-colors hover:scale-110"><span className="sr-only">WhatsApp</span><svg width="32" height="32" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-message-circle"><circle cx="12" cy="12" r="10" /><path d="M8 15s1.5-2 4-2 4 2 4 2" /></svg></a>
-                      <a href="https://www.instagram.com/Kuyavan_creations" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-primary transition-colors hover:scale-110"><span className="sr-only">Instagram</span><svg width="32" height="32" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-instagram"><rect x="2" y="2" width="20" height="20" rx="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" /><line x1="17.5" y1="6.5" x2="17.5" y2="6.5" /></svg></a>
-                      <a href="https://www.facebook.com/share/1KEEfAVFz1/" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-primary transition-colors hover:scale-110"><span className="sr-only">Facebook</span><svg width="32" height="32" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-facebook"><path d="M18 2h-3a4 4 0 0 0-4 4v3H7v4h4v8h4v-8h3l1-4h-4V6a1 1 0 0 1 1-1h3z" /></svg></a>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <motion.section
+                key={key}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 + idx * 0.1 }}
+                className="mb-12"
+              >
+                <h2 className="font-heading text-2xl font-bold text-foreground mb-6">{t(key)}</h2>
+                <ul className="space-y-3">
+                  {content[key].map((item, i) => (
+                    <li key={i} className="flex gap-3 text-muted-foreground">
+                      <span className="text-primary">•</span>
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </motion.section>
             ))}
 
           {/* Spiritual Guidance */}
