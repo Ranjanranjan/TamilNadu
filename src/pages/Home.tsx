@@ -45,8 +45,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Wisdom Quote */}
-      <WisdomQuote verseKey="home" />
+      {/* Wisdom Quote removed as requested */}
 
       {/* Problems Section */}
       <section id="problems" className="py-20 px-6">
