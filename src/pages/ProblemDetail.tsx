@@ -162,7 +162,6 @@ const ProblemDetail = () => {
       </main>
 
       <ContactFooter />
-      {/* <Footer /> */}
     </div>
   );
 };
