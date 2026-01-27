@@ -27,13 +27,8 @@ const ProblemDetail = () => {
     return () => clearTimeout(scrollTimer);
   }, [slug]);
 
-  if (!problem) {
-    return <div>Problem not found</div>;
-  }
 
-  const content = problem.content[language || 'en'];
-
-  // Form state for prayer request
+  // Form state for prayer request (must be before any early return)
   const [submitted, setSubmitted] = useState(false);
   const [message, setMessage] = useState("");
   const [name, setName] = useState("");
@@ -42,6 +37,12 @@ const ProblemDetail = () => {
   const [location, setLocation] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  if (!problem) {
+    return <div>Problem not found</div>;
+  }
+
+  const content = problem.content[language || 'en'];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -66,6 +67,7 @@ const ProblemDetail = () => {
       setLoading(false);
     }
   };
+  return (
     <div className="min-h-screen bg-background">
       <Header />
       
